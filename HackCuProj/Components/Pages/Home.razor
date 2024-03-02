@@ -1,0 +1,40 @@
+﻿@page "/"
+
+<PageTitle>Planner</PageTitle>
+
+<h1>Welcome to PerfectPlanner!</h1>
+
+@code {
+	string monthName = "";
+	DateTime monthEnd;
+	protected override void OnInitialized()
+	{
+		DateTime monthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+		monthEnd = monthStart.AddMonths(1).AddDays(-1);
+		monthName = monthStart.Month switch
+		{
+			1 => "January",
+			2 => "February",
+			3 => "March",
+			4 => "April",
+			5 => "May",
+			6 => "June",
+			7 => "July",
+			8 => "August",
+			9 => "September",
+			10 => "October",
+			11 => "November",
+			12 => "December",
+			_ => ""
+		};
+	}
+}
+
+<h1>@monthName</h1>
+
+<section>
+	@for (int i = 1; i <= monthEnd.Day; i++)
+	{
+		<div>@i</div>
+	}
+</section>
