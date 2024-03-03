@@ -1,14 +1,73 @@
-﻿section {
+﻿/*Calendar Formatting*/
+.Calendar-full {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    right: 0;
+}
+
+/*Month Name Formating*/
+.monthText {
+    text-align: left;
+    font-size: 2em;
+}
+
+/*Grid Formating*/
+.calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-gap:0px;
-    width: 50%;
-    position: absolute;
-    top: 50px;
-    right: 5px;
 }
 
-section > div {
+section.calendar-grid > div {
+    position: relative;
     border: 1px solid black;
+    padding: 0px 50px 30px 0px;
+}
+
+section.calendar-grid > div > span {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.selected-day {
+    background-color: cornflowerblue; 
+}
+
+#today-box {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
     padding: 10px;
+    background-color: lightgray; /* Change this to the color you want */
+}
+
+.monthMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/*Button Formating*/
+button.navigate {
+    padding: 10px;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.prevB {
+    background-color: #4CAF50;
+    margin: 0px 10px;
+}
+
+.nextB {
+    background-color: #008CBA;
+    margin: 0px 10px;
+}
+
+button.navigate:hover {
+    background-color: #007BBA;
 }
