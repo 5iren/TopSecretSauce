@@ -1,0 +1,10 @@
+﻿section {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap:10px;
+}
+
+section > div {
+    border: 1px solid black;
+    padding: 10px;
+}

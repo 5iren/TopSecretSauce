@@ -7,6 +7,7 @@
 @code {
 	string monthName = "";
 	DateTime monthEnd;
+	int num = 0;
 	protected override void OnInitialized()
 	{
 		DateTime monthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -27,12 +28,18 @@
 			12 => "December",
 			_ => ""
 		};
+		num = (int)monthStart.DayOfWeek;
 	}
 }
 
 <h1>@monthName</h1>
 
+
 <section>
+	@for(int i = 0; i < num; i++)
+	{
+		<div></div>
+	}
 	@for (int i = 1; i <= monthEnd.Day; i++)
 	{
 		<div>@i</div>
