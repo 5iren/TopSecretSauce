@@ -1,19 +1,108 @@
-﻿@page "/counter"
-@rendermode InteractiveServer
+﻿@page "/Counter"
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>Goals Tracker</PageTitle>
 
-<h1>Counter</h1>
+<style>
+    .action-section {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
 
-<p role="status">Current count: @currentCount</p>
+    .action-section > div {
+        flex: 1; /* Ensure equal width and fill the container */
+        padding: 20px;
+        margin: 0 10px;
+        border: 1px solid black;
+        text-align: center;
+    }
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    section {
+        display: block; /* Changed for a simple list layout */
+        width: 100%;
+        margin-top: 20px; /* Ensure some space between actions and list */
+    }
+
+    section > div {
+        border: 1px solid black;
+        padding: 10px;
+        margin-bottom: 5px; /* Space between each goal */
+        text-align: center;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #4CAF50; /* Green background for buttons */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<h1>Goals Page!</h1>
+
+<div class="action-section">
+    <!-- Add Goal Section -->
+    <div>
+        <h2>Add New Goal</h2>
+        <input type="text" @bind="newGoalName" placeholder="Goal name" />
+        <button @onclick="AddGoal">Add Goal</button>
+    </div>
+
+    <!-- Delete Goal Section -->
+    <div>
+        <h2>Delete Goal</h2>
+        <input type="text" @bind="goalNameToDelete" placeholder="Goal name to delete" />
+        <button @onclick="DeleteGoal">Delete Goal</button>
+    </div>
+</div>
+
+<section>
+    @foreach (var goal in goals)
+    {
+        <div>
+            <h2>@goal.Name</h2>
+        </div>
+    }
+</section>
 
 @code {
-    private int currentCount = 0;
-
-    private void IncrementCount()
+    private class Goal
     {
-        currentCount++;
+        public string Name { get; set; }
+    }
+
+    private List<Goal> goals = new List<Goal>
+    {
+        new Goal { Name = "Workout" },
+        new Goal { Name = "Water Intake" },
+        new Goal { Name = "Morning Sunlight" }
+    };
+    private string newGoalName;
+    private string goalNameToDelete;
+
+    private void AddGoal() {
+        if (!string.IsNullOrWhiteSpace(newGoalName))
+        {
+            goals.Add(new Goal { Name = newGoalName });
+            newGoalName = string.Empty; // Clear the input field after adding
+            StateHasChanged(); // Notify the component to re-render
+        }
+    }
+
+    private void DeleteGoal() {
+        var goalToDelete = goals.FirstOrDefault(g => g.Name.ToLower() == goalNameToDelete.ToLower());
+        if (goalToDelete != null)
+        {
+            goals.Remove(goalToDelete);
+            goalNameToDelete = string.Empty; // Clear the input field after deleting
+            StateHasChanged(); // Notify the component to re-render
+        }
     }
 }
