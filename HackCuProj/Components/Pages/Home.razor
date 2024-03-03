@@ -1,16 +1,34 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
 <PageTitle>Planner</PageTitle>
 
-<h1>Welcome to PerfectPlanner!</h1>
+<p>Welcome to PerfectPlanner!</p>
 
 @code {
+
 	string monthName = "";
 	DateTime monthEnd;
+	DateTime monthNow;
 	int num = 0;
+	int monthAway = 0;
+	DateTime monthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+	int daySelected;
+
 	protected override void OnInitialized()
 	{
-		DateTime monthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+		daySelected = DateTime.Today.Day;
+		findMonth();
+	}
+
+	async Task findMonth()
+	{
+		if (monthAway == 0) {
+			monthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+		} else {
+			monthStart = monthStart.AddMonths(monthAway);
+		}
+
 		monthEnd = monthStart.AddMonths(1).AddDays(-1);
 		monthName = monthStart.Month switch
 		{
@@ -28,23 +46,45 @@
 			12 => "December",
 			_ => ""
 		};
+
 		num = (int)monthStart.DayOfWeek;
+		await InvokeAsync(StateHasChanged);
+	}
+
+	void OnDayClick(int day)
+	{
+		daySelected = day;
+		StateHasChanged();
 	}
 }
 
+<div class="Calendar-full">
+	<div class=" monthMenu">
+		<button class="prevB" @onclick="async () => { monthAway--; await findMonth(); }">Prev</button>
+		<h2 class="monthText">@monthName</h2>
+		<button class="nextB" @onclick="async () => { monthAway++; await findMonth(); }">Next</button>
+	</div>
+	<p role="status">Today: @daySelected</p>
 
-<button>Prev</button>
-<h1>@monthName</h1>
-<button>Next</button>
+	<section class="calendar-grid">
+		@for(int i = 0; i < num; i++)
+		{
+			<div></div>
+		}
+		@for (int i = 1; i <= monthEnd.Day; i++)
+		{
+			var day = i;
+			<div @onclick="() => OnDayClick(day)">@i</div>
+		}
+		@for (int i = (int)monthEnd.DayOfWeek; i < 6; i++)
+		{
+			<div></div>
+		}
+	</section>
+</div>
 
-
-<section>
-	@for(int i = 0; i < num; i++)
-	{
-		<div></div>
-	}
-	@for (int i = 1; i <= monthEnd.Day; i++)
-	{
-		<div>@i</div>
-	}
-</section>
+@for (int i = 1; i <= monthEnd.Day; i++)
+{
+	var day = i;
+	
+}<div id="today-box">@DateTime.Today.ToString("d")</div>
